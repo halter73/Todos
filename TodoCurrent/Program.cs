@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<TodoDbContext>(options => options.UseInMemoryDatabase("Todos"));
-builder.Services.AddControllers();
 
 var app = builder.Build();
 
