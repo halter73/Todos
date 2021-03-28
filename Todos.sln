@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.138
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todos", "TodoBasic\Todos.csproj", "{3F583E94-3C46-4727-A4DE-A4909D4BA094}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodosWithRequestDelegates", "TodoBasic\TodosWithRequestDelegates.csproj", "{3F583E94-3C46-4727-A4DE-A4909D4BA094}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoWithControllers", "TodoWithControllers\TodoWithControllers.csproj", "{277F0126-AA7E-46D6-BDDC-B6B6729644ED}"
 EndProject
