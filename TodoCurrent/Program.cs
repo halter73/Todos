@@ -24,14 +24,12 @@ async Task<List<Todo>> GetTodos([FromServices] TodoDbContext db)
 app.MapGet("/api/todos/{id}", (Func<int, TodoDbContext, Task<IResult>>)GetTodo);
 async Task<IResult> GetTodo([FromRoute] int id, [FromServices] TodoDbContext db)
 {
-    var todo = await db.Todos.FindAsync(id);
-
-    if (todo is null)
+    if (await db.Todos.FindAsync(id) is Todo todo)
     {
-        return new NotFoundResult();
+        return new JsonResult(todo);
     }
 
-    return new JsonResult(todo);
+    return new NotFoundResult();
 }
 
 app.MapPost("/api/todos", (Func<Todo, TodoDbContext, Task<StatusCodeResult>>)CreateTodo);
@@ -46,34 +44,30 @@ async Task<StatusCodeResult> CreateTodo([FromBody] Todo todo, [FromServices] Tod
 app.MapPost("/api/todos/{id}", (Func<int, Todo, TodoDbContext, Task<StatusCodeResult>>)UpdateCompleted);
 async Task<StatusCodeResult> UpdateCompleted([FromRoute] int id, [FromBody] Todo inputTodo, [FromServices] TodoDbContext db)
 {
-    var todo = await db.Todos.FindAsync(id);
-
-    if (todo is null)
+    if (await db.Todos.FindAsync(id) is Todo todo)
     {
-        return new NotFoundResult();
+        todo.IsComplete = inputTodo.IsComplete;
+
+        await db.SaveChangesAsync();
+
+        return new NoContentResult();
     }
 
-    todo.IsComplete = inputTodo.IsComplete;
-
-    await db.SaveChangesAsync();
-
-    return new NoContentResult();
+    return new NotFoundResult();
 }
 
 app.MapDelete("/api/todos/{id}", (Func<int, TodoDbContext, Task<StatusCodeResult>>)DeleteTodo);
 async Task<StatusCodeResult> DeleteTodo([FromRoute] int id, [FromServices] TodoDbContext db)
 {
-    var todo = await db.Todos.FindAsync(id);
-
-    if (todo is null)
+    if (await db.Todos.FindAsync(id) is Todo todo )
     {
-        return new NotFoundResult();
+        db.Todos.Remove(todo);
+        await db.SaveChangesAsync();
+
+        return new NoContentResult();
     }
 
-    db.Todos.Remove(todo);
-    await db.SaveChangesAsync();
-
-    return new NoContentResult();
+    return new NotFoundResult();
 }
 
 await app.RunAsync();
