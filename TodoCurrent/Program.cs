@@ -28,7 +28,7 @@ async Task<IResult> GetTodo([FromRoute] int id, [FromServices] TodoDbContext db)
 
     if (todo is null)
     {
-        return new StatusCodeResult(404);
+        return new NotFoundResult();
     }
 
     return new JsonResult(todo);
@@ -40,7 +40,7 @@ async Task<StatusCodeResult> CreateTodo([FromBody] Todo todo, [FromServices] Tod
     await db.Todos.AddAsync(todo);
     await db.SaveChangesAsync();
 
-    return new StatusCodeResult(204);
+    return new NoContentResult();
 }
 
 app.MapPost("/api/todos/{id}", (Func<int, Todo, TodoDbContext, Task<StatusCodeResult>>)UpdateCompleted);
@@ -50,14 +50,14 @@ async Task<StatusCodeResult> UpdateCompleted([FromRoute] int id, [FromBody] Todo
 
     if (todo is null)
     {
-        return new StatusCodeResult(404);
+        return new NotFoundResult();
     }
 
     todo.IsComplete = inputTodo.IsComplete;
 
     await db.SaveChangesAsync();
 
-    return new StatusCodeResult(204);
+    return new NoContentResult();
 }
 
 app.MapDelete("/api/todos/{id}", (Func<int, TodoDbContext, Task<StatusCodeResult>>)DeleteTodo);
@@ -67,13 +67,13 @@ async Task<StatusCodeResult> DeleteTodo([FromRoute] int id, [FromServices] TodoD
 
     if (todo is null)
     {
-        return new StatusCodeResult(404);
+        return new NotFoundResult();
     }
 
     db.Todos.Remove(todo);
     await db.SaveChangesAsync();
 
-    return new StatusCodeResult(204);
+    return new NoContentResult();
 }
 
 await app.RunAsync();
