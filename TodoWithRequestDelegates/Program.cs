@@ -47,7 +47,7 @@ async Task CreateTodo(HttpContext context)
     var todo = await context.Request.ReadFromJsonAsync<Todo>();
 
     using var db = new TodoDbContext();
-    await db.Todos.AddAsync(todo);
+    db.Todos.Add(todo);
     await db.SaveChangesAsync();
 
     context.Response.StatusCode = 204;

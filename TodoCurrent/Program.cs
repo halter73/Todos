@@ -37,7 +37,7 @@ async Task<IResult> GetTodo([FromRoute] int id, [FromServices] TodoDbContext db)
 app.MapPost("/api/todos", (Func<Todo, TodoDbContext, Task<StatusCodeResult>>)CreateTodo);
 async Task<StatusCodeResult> CreateTodo([FromBody] Todo todo, [FromServices] TodoDbContext db)
 {
-    await db.Todos.AddAsync(todo);
+    db.Todos.Add(todo);
     await db.SaveChangesAsync();
 
     return new NoContentResult();

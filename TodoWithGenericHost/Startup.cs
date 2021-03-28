@@ -73,7 +73,7 @@ namespace TodoWithGenericHost
             var todo = await context.Request.ReadFromJsonAsync<Todo>();
 
             var db = context.RequestServices.GetRequiredService<TodoDbContext>();
-            await db.Todos.AddAsync(todo);
+            db.Todos.Add(todo);
             await db.SaveChangesAsync();
 
             context.Response.StatusCode = 204;
