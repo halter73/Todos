@@ -1,4 +1,4 @@
-#!/usr/bin/env dotnet run
+//#!/usr/bin/env dotnet run!?
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;

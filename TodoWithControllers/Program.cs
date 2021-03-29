@@ -30,9 +30,7 @@ public class TodoController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<Todo>>> GetAll()
     {
-        var todos = await _db.Todos.ToListAsync();
-
-        return todos;
+        return await _db.Todos.ToListAsync();
     }
 
     [HttpGet("{id}")]
