@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using static Demo.StaticMethods;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<TodoDbContext>(options => options.UseInMemoryDatabase("Todos"));
-builder.Services.AddControllers();
 
 var app = builder.Build();
 
