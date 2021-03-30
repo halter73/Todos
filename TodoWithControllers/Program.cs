@@ -1,85 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<TodoDbContext>(options => options.UseInMemoryDatabase("Todos"));
-builder.Services.AddControllers();
-
-var app = builder.Build();
-
-app.MapControllers();
-
-await app.RunAsync();
-
-[ApiController]
-[Route("/api/todos")]
-public class TodoController : ControllerBase
+namespace TodoWithControllers
 {
-    private readonly TodoDbContext _db;
-    public TodoController(TodoDbContext db)
+    public class Program
     {
-        _db = db ?? throw new ArgumentNullException(nameof(db));
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<List<Todo>>> GetAll()
-    {
-        return await _db.Todos.ToListAsync();
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Todo>> Get(long id)
-    {
-        var todo = await _db.Todos.FindAsync(id);
-        if (todo == null)
+        public static void Main(string[] args)
         {
-            return NotFound();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        return todo;
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
-
-    [HttpPost]
-    public async Task Post(Todo todo)
-    {
-        _db.Todos.Add(todo);
-        await _db.SaveChangesAsync();
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(long id)
-    {
-        var todo = await _db.Todos.FindAsync(id);
-        if (todo == null)
-        {
-            return NotFound();
-        }
-
-        _db.Todos.Remove(todo);
-        await _db.SaveChangesAsync();
-        return Ok();
-    }
-}
-
-public class Todo
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public bool IsComplete { get; set; }
-}
-
-public class TodoDbContext : DbContext
-{
-    public TodoDbContext(DbContextOptions<TodoDbContext> options) : base(options)
-    {
-
-    }
-
-    public DbSet<Todo> Todos { get; set; }
 }
